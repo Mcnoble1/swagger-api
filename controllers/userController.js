@@ -1,35 +1,41 @@
 const User = require('../models/userModel');
 
-let users = [
-  new User(1, "John Doe", "john@example.com"),
-  new User(2, "Jane Doe", "jane@example.com")
-];
-
-/**
- * @desc Get all users
- * @route GET /api/users
- */
-exports.getUsers = (req, res) => {
+exports.getUsers = async (req, res) => {
+  const users = await User.find();
   res.json(users);
 };
 
-/**
- * @desc Get a single user by ID
- * @route GET /api/users/:id
- */
-exports.getUserById = (req, res) => {
-  const user = users.find(u => u.id === parseInt(req.params.id));
+exports.getUserById = async (req, res) => {
+  const user = await User.findById(req.params.id);
   if (!user) return res.status(404).json({ message: "User not found" });
   res.json(user);
 };
 
-/**
- * @desc Create a new user
- * @route POST /api/users
- */
-exports.createUser = (req, res) => {
-  const { name, email } = req.body;
-  const newUser = new User(users.length + 1, name, email);
-  users.push(newUser);
-  res.status(201).json(newUser);
+exports.createUser = async (req, res) => {
+  try {
+    const user = await User.create(req.body);
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json({ message: "User updated successfully", user });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (!user) return res.status(404).json({ message: "User not found" });
+  res.json({ message: "User deleted successfully" });
 };

@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUsers, getUserById, createUser } = require('../controllers/userController');
+const { getUsers, getUserById, createUser, updateUser, deleteUser } = require('../controllers/userController');
 
 const router = express.Router();
 
@@ -85,4 +85,50 @@ router.get('/users/:id', getUserById);
  */
 router.post('/users', createUser);
 
-module.exports = router;
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   put:
+ *     summary: Update a user by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ */
+router.put('/users/:id', updateUser);
+
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Delete a user by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       404:
+ *         description: User not found
+ */
+router.delete('/users/:id', deleteUser);

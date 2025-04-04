@@ -9,7 +9,7 @@ const options = {
       version: "1.0.0",
       description: "A simple Express API with Swagger documentation"
     },
-    servers: [{ url: "http://localhost:5000" }]
+    servers: [{ url: "http://localhost:1234" }]
   },
   apis: ["./routes/*.js"], // Specify the route files
 };
