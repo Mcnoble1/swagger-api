@@ -132,3 +132,5 @@ router.put('/users/:id', updateUser);
  *         description: User not found
  */
 router.delete('/users/:id', deleteUser);
+
+module.exports = router;
